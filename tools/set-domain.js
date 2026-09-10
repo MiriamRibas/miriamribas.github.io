@@ -35,7 +35,10 @@ for (const file of walk(root)) {
   // insere depois da meta description
   html = html.replace(/(<meta name="description"[^>]*>)/, `$1\n  <link rel="canonical" href="${url}">\n  <meta property="og:url" content="${url}">`);
   // og:image absoluta
-  html = html.replace(/<meta property="og:image" content="[^"]*">/, `<meta property="og:image" content="${DOMAIN}/assets/img/og-image.jpg">`);
+  html = html.replace(/\s*<meta property="og:image:(width|height)"[^>]*>/g, "");
+  html = html.replace(/<meta property="og:image" content="[^"]*">/, `<meta property="og:image" content="${DOMAIN}/assets/img/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">`);
   fs.writeFileSync(file, html);
   if (!noindex) urls.push({ url, prioridade: urlPath === "/" ? "1.0" : rel.startsWith("noticias/") ? "0.6" : "0.8" });
   console.log("ok", rel, "→", url, noindex ? "(noindex, fora do sitemap)" : "");
