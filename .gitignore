@@ -1,0 +1,10 @@
+# Notas internas: NÃO publicar (o repositório do GitHub Pages é público)
+HANDOFF.md
+
+# Sistema / editores
+Thumbs.db
+.DS_Store
+desktop.ini
+node_modules/
+*.psd
+*.log

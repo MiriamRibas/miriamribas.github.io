@@ -1,0 +1,8 @@
+Molduras finais do gerador "Eu apoio a Miriam Ribas 55188"
+-----------------------------------------------------------
+Salvar aqui 3 PNGs com fundo transparente onde a foto entra:
+  feed.png    1080 x 1350
+  story.png   1080 x 1920
+  perfil.png  1080 x 1080 (foto ocupa o quadrado inteiro; a moldura e' so' o anel/faixa por cima)
+Depois, em assets/js/apoiador.js: ajustar foto {cx, cy, r} e a caixa "nome" de cada formato
+e trocar MOLDURAS_PRONTAS = true.
