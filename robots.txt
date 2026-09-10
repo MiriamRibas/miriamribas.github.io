@@ -3,4 +3,4 @@ Allow: /
 Disallow: /partials/
 Disallow: /tools/
 
-Sitemap: https://miriamribas.com.br/sitemap.xml
+Sitemap: http://miriamribas.com.br/sitemap.xml

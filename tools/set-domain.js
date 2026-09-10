@@ -4,7 +4,9 @@
 const fs = require("fs");
 const path = require("path");
 
-const DOMAIN = "https://miriamribas.com.br";
+// Enquanto o GitHub não emite o certificado, usar http para o WhatsApp/Facebook conseguirem buscar a capa.
+// Quando https://miriamribas.com.br abrir sem erro: trocar para "https://miriamribas.com.br" e rodar de novo.
+const DOMAIN = "http://miriamribas.com.br";
 // true = site conectado ao domínio mas ainda sem aprovação: injeta noindex em todas as páginas
 // (buscadores não indexam). Depois do "aprovado", troque para false e rode de novo.
 const PRE_LANCAMENTO = true;
