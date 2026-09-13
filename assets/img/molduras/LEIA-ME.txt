@@ -3,6 +3,16 @@ Molduras finais do gerador "Eu apoio a Miriam Ribas 55188"
 Salvar aqui 3 PNGs com fundo transparente onde a foto entra:
   feed.png    1080 x 1350
   story.png   1080 x 1920
-  perfil.png  1080 x 1080 (foto ocupa o quadrado inteiro; a moldura e' so' o anel/faixa por cima)
-Depois, em assets/js/apoiador.js: ajustar foto {cx, cy, r} e a caixa "nome" de cada formato
+  perfil.png  1080 x 1080 (a foto ocupa o quadrado inteiro; a moldura e' so' o anel/faixa por cima)
+
+Identificacao legal (obrigatoria em toda arte gerada):
+  O site ja escreve por cima da moldura, numa faixa roxa arredondada, a linha
+  "Eleicao 2026 · Miriam Ribas · Deputada Estadual · 55188 · PSD · CNPJ 68.455.313/0001-78".
+  Deixe livre a area onde ela entra:
+    feed   -> faixa centralizada em y ~1320 (ultimos ~50 px da arte)
+    story  -> faixa centralizada em y ~1872 (ultimos ~70 px da arte)
+    perfil -> faixa centralizada em y ~846, logo acima da area do numero
+  Se preferir desenhar a linha dentro da propria arte, avise: basta zerar legal.y do formato.
+
+Depois, em assets/js/apoiador.js: ajustar foto {cx, cy, r}, a caixa "nome" e legal.y de cada formato
 e trocar MOLDURAS_PRONTAS = true.

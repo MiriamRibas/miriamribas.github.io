@@ -9,7 +9,7 @@ const path = require("path");
 const DOMAIN = "https://miriamribas.com.br";
 // true = site conectado ao domínio mas ainda sem aprovação: injeta noindex em todas as páginas
 // (buscadores não indexam). Depois do "aprovado", troque para false e rode de novo.
-const PRE_LANCAMENTO = true;
+const PRE_LANCAMENTO = false;
 const root = path.resolve(__dirname, "..");
 const hoje = new Date().toISOString().slice(0, 10);
 

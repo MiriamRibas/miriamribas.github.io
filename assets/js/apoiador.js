@@ -15,7 +15,10 @@
   if (!mount) return;
   var ROOT = mount.getAttribute("data-root") || "";
 
-  var CAMPANHA = { nome: "Míriam Ribas", numero: "55188", cargo: "Deputada Estadual" };
+  var CAMPANHA = { nome: "Míriam Ribas", numero: "55188", cargo: "Deputada Estadual", partido: "PSD", cnpj: "68.455.313/0001-78" };
+  // Identificação legal obrigatória em toda arte gerada (legislação eleitoral e contrato nº 4, cláusula 3.6).
+  // Desenhada por cima da moldura em todos os formatos. Se a moldura final já trouxer essa linha, use legal.y = 0.
+  var LEGAL = "Eleição 2026 · " + CAMPANHA.nome + " · " + CAMPANHA.cargo + " · " + CAMPANHA.numero + " · " + CAMPANHA.partido + " · CNPJ " + CAMPANHA.cnpj;
 
   // Troque para true quando os PNGs finais estiverem em assets/img/molduras/ (feed.png, story.png, perfil.png).
   var MOLDURAS_PRONTAS = false;
@@ -25,20 +28,23 @@
       foto: { cx: 540, cy: 540, r: 285 },
       nome: { x0: 90, y0: 865, x1: 990, y1: 935, pill: true },
       moldura: ROOT + "assets/img/molduras/feed.png",
-      prov: { tituloY: 105, taglineY: 195, logoW: 520, logoY: 965, numSize: 150, numY: 1240, rodapeY: 0 } },
+      legal: { y: 1320, maxW: 1000 },
+      prov: { tituloY: 105, taglineY: 195, logoW: 520, logoY: 965, numSize: 150, numY: 1228, rodapeY: 0 } },
     { key: "story", slot: "A", label: "Story do Instagram, Facebook e WhatsApp", dim: "1080 × 1920", w: 1080, h: 1920,
       foto: { cx: 540, cy: 800, r: 360 },
       nome: { x0: 90, y0: 1210, x1: 990, y1: 1290, pill: true },
       moldura: ROOT + "assets/img/molduras/story.png",
+      legal: { y: 1872, maxW: 1000 },
       prov: { tituloY: 300, taglineY: 395, logoW: 560, logoY: 1330, numSize: 180, numY: 1640, rodapeY: 1800 } },
     { key: "perfil", slot: "B", label: "Foto de perfil do WhatsApp, Instagram e Facebook", dim: "1080 × 1080", w: 1080, h: 1080,
       foto: { cx: 540, cy: 540, r: 540 },
       nome: null,
+      legal: { y: 846, maxW: 820 },
       moldura: ROOT + "assets/img/molduras/perfil.png" }
   ];
   var PERFIL = FORMATOS[2];
 
-  var CORES = { roxo: "#46176E", roxoEscuro: "#26024D", rosa: "#FF3DBA", branco: "#FFFFFF" };
+  var CORES = { roxo: "#3F0672", roxoEscuro: "#23033F", rosa: "#FD3FB5", branco: "#FFFFFF" }; // paleta do manual de identidade
 
   /* ---------- UI ---------- */
   mount.innerHTML =
@@ -133,13 +139,14 @@
     if (foto) fotoCirculo(ctxA, 300, 300, 300, foto, stA);
   }
   // prévia do perfil: foto + moldura (real ou provisória), igual ao resultado final
-  var PERFIL_PREVIEW = { key: "perfil", w: 600, h: 600, foto: { cx: 300, cy: 300, r: 300 } };
+  var PERFIL_PREVIEW = { key: "perfil", w: 600, h: 600, foto: { cx: 300, cy: 300, r: 300 }, legal: { y: 846, maxW: 820 } };
   function desenharB() {
     ctxB.clearRect(0, 0, 600, 600);
     if (!molduras.perfil) fundoProvisorio(ctxB, PERFIL_PREVIEW);
     else { ctxB.fillStyle = "#EFE6FA"; ctxB.fillRect(0, 0, 600, 600); }
     if (foto) fotoCirculo(ctxB, 300, 300, 300, foto, stB);
     if (molduras.perfil) ctxB.drawImage(molduras.perfil, 0, 0, 600, 600); else frenteProvisoria(ctxB, PERFIL_PREVIEW);
+    desenharLegal(ctxB, PERFIL_PREVIEW);
   }
   zoomA.addEventListener("input", function () { stA.z = parseFloat(zoomA.value); desenharA(); });
   zoomB.addEventListener("input", function () { stB.z = parseFloat(zoomB.value); desenharB(); });
@@ -239,6 +246,21 @@
     ctx.fillText(texto, cx, cy + 2 * s); ctx.shadowColor = "transparent";
   }
 
+  /* ---------- identificação legal ---------- */
+  function desenharLegal(ctx, f) {
+    if (!f.legal || !f.legal.y) return;
+    var s = f.w / 1080, pad = 36 * s, maxW = f.legal.maxW * s, size = 20 * s;
+    ctx.save();
+    ctx.shadowColor = "transparent"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.letterSpacing = "0px";
+    ctx.font = "700 " + size + "px Montserrat, Arial, sans-serif";
+    while (ctx.measureText(LEGAL).width > maxW - pad && size > 10 * s) { size -= .5 * s; ctx.font = "700 " + size + "px Montserrat, Arial, sans-serif"; }
+    var tw = ctx.measureText(LEGAL).width + pad, th = size + 16 * s, cy = f.legal.y * s;
+    roundRect(ctx, (f.w - tw) / 2, cy - th / 2, tw, th, th / 2);
+    ctx.fillStyle = "rgba(35,3,63,.85)"; ctx.fill();
+    ctx.fillStyle = CORES.branco; ctx.fillText(LEGAL, f.w / 2, cy + 1 * s);
+    ctx.restore();
+  }
+
   /* ---------- render final ---------- */
   function render(f) {
     var c = document.createElement("canvas"); c.width = f.w; c.height = f.h; var ctx = c.getContext("2d");
@@ -247,6 +269,7 @@
     fotoCirculo(ctx, f.foto.cx, f.foto.cy, f.foto.r + (moldura ? 4 : 0), foto, st);
     if (moldura) ctx.drawImage(moldura, 0, 0, f.w, f.h); else frenteProvisoria(ctx, f);
     if (f.nome) desenharNome(ctx, f.nome, nomeEl.value, f.w / 1080);
+    desenharLegal(ctx, f);
     return c;
   }
 
