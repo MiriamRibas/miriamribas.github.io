@@ -36,6 +36,10 @@ for (const file of walk(root)) {
   if (PRE_LANCAMENTO) html = html.replace(/(<meta name="viewport"[^>]*>)/, `$1\n  <meta name="robots" content="noindex, nofollow" data-prelancamento>`);
   // insere depois da meta description
   html = html.replace(/(<meta name="description"[^>]*>)/, `$1\n  <link rel="canonical" href="${url}">\n  <meta property="og:url" content="${url}">`);
+  // ícones em PNG (Google usa no resultado de busca; iPhone usa na tela inicial)
+  html = html.replace(/\s*<link rel="(icon" type="image\/png" sizes="192x192"|apple-touch-icon") href="[^"]*">/g, "");
+  html = html.replace(/(<link rel="icon" href="([^"]*)favicon\.svg" type="image\/svg\+xml">)/,
+    `$1\n  <link rel="icon" type="image/png" sizes="192x192" href="$2favicon-192.png">\n  <link rel="apple-touch-icon" href="$2favicon-180.png">`);
   // og:image absoluta
   html = html.replace(/\s*<meta property="og:image:(width|height)"[^>]*>/g, "");
   html = html.replace(/<meta property="og:image" content="[^"]*">/, `<meta property="og:image" content="${DOMAIN}/assets/img/og-image.jpg">

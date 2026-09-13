@@ -304,6 +304,7 @@
           }
           card.appendChild(acts);
           if (window.gtag) window.gtag("event", "gerar_arte", { formato: f.key });
+          if (window.fbq) window.fbq("trackCustom", "GerarArteEuApoio", { formato: f.key });
         }, "image/jpeg", 0.92);
       });
       gerarEl.disabled = false; gerarEl.textContent = "Gerar minhas artes ♥";

@@ -14,8 +14,8 @@ window.SITE_CONFIG = {
   whatsappMsg: "Olá! Vim pelo site da Míriam Ribas 55188 e quero saber mais sobre a campanha.",
   email: "Miriamribas55188@gmail.com",
   instagram: "https://www.instagram.com/miriamribas55188",
-  // CONFIRMAR: endereço exato da página no Facebook (briefing pediu Facebook, mas não informou o @)
-  facebook: "https://www.facebook.com/miriamribas55188",
+  // Página encontrada no Google em 13/09/2026: "Miriam Ribas (@MirianRiibas) · Pré-candidata a Deputada Estadual PSD"
+  facebook: "https://www.facebook.com/MirianRiibas",
   // Endpoint do Google Apps Script que grava o cadastro na planilha (ver tools/apps-script.gs).
   // Vazio = o formulário envia o cadastro pelo WhatsApp da campanha.
   formEndpoint: "",
