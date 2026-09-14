@@ -22,7 +22,8 @@ window.SITE_CONFIG = {
   // ID do vídeo do YouTube para a área de vídeo da home (vazio = mostra o poster com link).
   youtubeId: "",
   // Medição (preencher na etapa de SEO/anúncios). Só carregam depois do aceite de cookies.
-  ga4Id: "",
+  // Google Analytics 4 · conta miriamribas1963@gmail.com · propriedade "Site Míriam Ribas 55188" (13/09/2026)
+  ga4Id: "G-0F8HKR86V5",
   metaPixelId: ""
 };
 
