@@ -1,0 +1,2 @@
+Montserrat, Nunito e Titan One: licença SIL Open Font License 1.1 (uso e hospedagem livres).
+Subconjunto "latin" baixado do Google Fonts em 13/09/2026. Declarações @font-face no topo de assets/css/style.css.

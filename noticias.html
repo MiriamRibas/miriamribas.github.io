@@ -17,9 +17,8 @@
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="icon" type="image/png" sizes="192x192" href="assets/img/favicon-192.png">
   <link rel="apple-touch-icon" href="assets/img/favicon-180.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Nunito:wght@400;600;700&family=Titan+One&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body data-page="noticias">
@@ -28,7 +27,7 @@
 <header class="header">
   <div class="container header__inner">
     <a class="header__logo" href="index.html" aria-label="Míriam Ribas · Deputada Estadual · Início">
-      <img src="assets/img/logo-horizontal.png" alt="Míriam Ribas · Deputada Estadual · 55188" width="1000" height="234">
+      <picture><source srcset="assets/img/logo-horizontal-480.webp" type="image/webp"><img src="assets/img/logo-horizontal-480.png" alt="Míriam Ribas · Deputada Estadual · 55188" width="480" height="112"></picture>
     </a>
     <nav class="nav" id="menu" aria-label="Menu principal">
       <a href="index.html" data-nav="inicio">Início</a>
@@ -48,7 +47,7 @@
 <main id="conteudo">
 
   <section class="page-hero">
-    <img class="page-hero__heart" src="assets/img/coracao-rosa.png" alt="" width="900" height="791" aria-hidden="true">
+    <img class="page-hero__heart" src="assets/img/coracao-rosa.webp" alt="" width="900" height="723" aria-hidden="true">
     <div class="container">
       <div class="reveal" style="max-width:760px">
         <div class="breadcrumb"><a href="index.html">Início</a> · Notícias e Ações</div>
@@ -61,6 +60,7 @@
 
   <section class="section">
     <div class="container">
+      <h2 class="sr-only">Últimas notícias e ações</h2>
       <div class="grid grid--2">
         <article class="card post-card reveal">
           <a class="post-card__img" href="noticias/conheca-miriam-ribas.html" tabindex="-1" aria-hidden="true"><img src="assets/img/capa-cidade.webp" alt="" width="1600" height="900" loading="lazy"></a>
@@ -124,13 +124,13 @@
       <div class="apoio-mock">
         <div class="apoio-mock__foto"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm0 2c-4 0-8 2-8 5v2h16v-2c0-3-4-5-8-5Z"/></svg></div>
         <div class="apoio-mock__txt">Eu apoio</div>
-        <img src="assets/img/logo-branco-topo.png" alt="">
+        <img src="assets/img/logo-branco-topo-160.png" alt="" width="160" height="57" loading="lazy">
         <div class="apoio-mock__num">55188</div>
       </div>
       <div class="apoio-mock">
         <div class="apoio-mock__foto"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm0 2c-4 0-8 2-8 5v2h16v-2c0-3-4-5-8-5Z"/></svg></div>
         <div class="apoio-mock__txt">Eu apoio</div>
-        <img src="assets/img/logo-branco-topo.png" alt="">
+        <img src="assets/img/logo-branco-topo-160.png" alt="" width="160" height="57" loading="lazy">
         <div class="apoio-mock__num">55188</div>
       </div>
     </div>
@@ -141,7 +141,7 @@
   <div class="container">
     <div class="footer__grid">
       <div class="footer__logo">
-        <img src="assets/img/logo-branco.png" alt="Míriam Ribas · Deputada Estadual · 55188" width="928" height="598">
+        <picture><source srcset="assets/img/logo-branco-420.webp" type="image/webp"><img src="assets/img/logo-branco-420.png" alt="Míriam Ribas · Deputada Estadual · 55188" width="420" height="271" loading="lazy"></picture>
         <p class="footer__slogan">Com o povo. Cuidado que vira ação.</p>
         <p>Diadema, Grande ABC e todo o estado de São Paulo.</p>
         <div class="footer__social">
@@ -151,7 +151,7 @@
         </div>
       </div>
       <div>
-        <h4>Navegação</h4>
+        <h2 class="footer__h">Navegação</h2>
         <ul>
           <li><a href="index.html">Início</a></li>
           <li><a href="conheca-a-miriam.html">Conheça a Míriam</a></li>
@@ -161,7 +161,7 @@
         </ul>
       </div>
       <div>
-        <h4>Apoie</h4>
+        <h2 class="footer__h">Apoie</h2>
         <ul>
           <li><a href="participe.html#eu-apoio">Criar arte “Eu apoio”</a></li>
           <li><a href="participe.html#cadastro">Cadastro de apoiadores</a></li>
@@ -170,7 +170,7 @@
         </ul>
       </div>
       <div>
-        <h4>Contato</h4>
+        <h2 class="footer__h">Contato</h2>
         <ul>
           <li><a data-wa href="#">WhatsApp: <span data-wa-number></span></a></li>
           <li><a data-mail data-mail-text href="#">e-mail</a></li>

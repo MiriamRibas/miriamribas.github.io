@@ -98,7 +98,7 @@
     im.onload = function () { molduras[f.key] = im; if (f.key === "perfil") desenharB(); };
     im.onerror = function () { molduras[f.key] = null; };
   });
-  ["logo-branco-topo", "logo-branco"].forEach(function (k) {
+  if (!MOLDURAS_PRONTAS) ["logo-branco-topo"].forEach(function (k) { // só a moldura provisória usa o logo
     var im = new Image(); im.src = ROOT + "assets/img/" + k + ".png"; im.onload = function () { logos[k] = im; };
   });
 
