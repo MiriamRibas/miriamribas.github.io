@@ -1,18 +1,18 @@
-Molduras finais do gerador "Eu apoio a Miriam Ribas 55188"
------------------------------------------------------------
-Salvar aqui 3 PNGs com fundo transparente onde a foto entra:
-  feed.png    1080 x 1350
-  story.png   1080 x 1920
-  perfil.png  1080 x 1080 (a foto ocupa o quadrado inteiro; a moldura e' so' o anel/faixa por cima)
+Molduras finais do gerador "Eu apoio a Miriam Ribas 55188" (13/09/2026)
+------------------------------------------------------------------------
+feed.webp    1080 x 1350
+story.webp   1080 x 1920
+perfil.webp  1080 x 1080
 
-Identificacao legal (obrigatoria em toda arte gerada):
-  O site ja escreve por cima da moldura, numa faixa roxa arredondada, a linha
-  "Eleicao 2026 · Miriam Ribas · Deputada Estadual · 55188 · PSD · CNPJ 68.455.313/0001-78".
-  Deixe livre a area onde ela entra:
-    feed   -> faixa centralizada em y ~1320 (ultimos ~50 px da arte)
-    story  -> faixa centralizada em y ~1872 (ultimos ~70 px da arte)
-    perfil -> faixa centralizada em y ~846, logo acima da area do numero
-  Se preferir desenhar a linha dentro da propria arte, avise: basta zerar legal.y do formato.
+Originais do Vinicius: Downloads\Miriam Ribas\Site\Molduras Eu Apoio (1 = feed, 2 = perfil, 3 = story).
+Os originais vieram SEM transparencia (xadrez desenhado no lugar da foto). O recorte foi feito por script:
+circulo ajustado pela borda interna do anel amarelo + flood fill do xadrez + conversao para WebP com alfa.
 
-Depois, em assets/js/apoiador.js: ajustar foto {cx, cy, r}, a caixa "nome" e legal.y de cada formato
-e trocar MOLDURAS_PRONTAS = true.
+Medidas usadas em assets/js/apoiador.js (coordenadas em 1080 px):
+  feed   foto cx 539 cy 522 r 292 · nome em pilula rosa y 868-938
+  story  foto cx 539 cy 738 r 344 · nome em branco na barra roxa x 163-916 y 1180-1270
+  perfil foto cx 539 cy 492 r 428 · sem nome
+As tres artes ja trazem "Eleicoes 2026 · PSD · CNPJ 68.455.313/0001-78", por isso legal.y = 0.
+
+Para trocar uma arte: exporte PNG com transparencia real no mesmo tamanho, converta para .webp
+e ajuste cx/cy/r se o circulo mudar de lugar.

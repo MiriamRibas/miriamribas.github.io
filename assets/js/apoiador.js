@@ -4,10 +4,10 @@
    - Feed e story usam a mesma foto em círculo (ajuste A).
    - A foto de perfil (1080×1080) tem ajuste próprio (ajuste B), com a
      moldura desenhada na prévia para a pessoa ver exatamente o resultado.
-   - Cada formato usa uma moldura PNG (assets/img/molduras/*.png) com
-     um buraco transparente onde entra a foto. Enquanto a moldura final
-     não existe (MOLDURAS_PRONTAS = false), o script desenha uma moldura
-     provisória com a identidade da campanha.
+   - Cada formato usa a moldura final em WebP com alfa (assets/img/molduras/
+     feed.webp, story.webp, perfil.webp), com o círculo transparente onde a
+     foto entra. Medidas e origem das artes em assets/img/molduras/LEIA-ME.txt.
+     Com MOLDURAS_PRONTAS = false o script volta à moldura provisória.
    ===================================================================== */
 (function () {
   "use strict";
@@ -21,26 +21,26 @@
   var LEGAL = "Eleição 2026 · " + CAMPANHA.nome + " · " + CAMPANHA.cargo + " · " + CAMPANHA.numero + " · " + CAMPANHA.partido + " · CNPJ " + CAMPANHA.cnpj;
 
   // Troque para true quando os PNGs finais estiverem em assets/img/molduras/ (feed.png, story.png, perfil.png).
-  var MOLDURAS_PRONTAS = false;
+  var MOLDURAS_PRONTAS = true; // artes finais do Vinicius, 13/09/2026 (recorte e medidas feitos pelo Claude)
 
   var FORMATOS = [
     { key: "feed", slot: "A", label: "Feed do Instagram e Facebook", dim: "1080 × 1350", w: 1080, h: 1350,
-      foto: { cx: 540, cy: 540, r: 285 },
-      nome: { x0: 90, y0: 865, x1: 990, y1: 935, pill: true },
-      moldura: ROOT + "assets/img/molduras/feed.png",
-      legal: { y: 1320, maxW: 1000 },
+      foto: { cx: 539, cy: 522, r: 292 },
+      nome: { x0: 90, y0: 868, x1: 990, y1: 938, pill: true },
+      moldura: ROOT + "assets/img/molduras/feed.webp",
+      legal: { y: 0, maxW: 1000 }, // a arte já traz "Eleições 2026 · PSD · CNPJ"
       prov: { tituloY: 105, taglineY: 195, logoW: 520, logoY: 965, numSize: 150, numY: 1228, rodapeY: 0 } },
     { key: "story", slot: "A", label: "Story do Instagram, Facebook e WhatsApp", dim: "1080 × 1920", w: 1080, h: 1920,
-      foto: { cx: 540, cy: 800, r: 360 },
-      nome: { x0: 90, y0: 1210, x1: 990, y1: 1290, pill: true },
-      moldura: ROOT + "assets/img/molduras/story.png",
-      legal: { y: 1872, maxW: 1000 },
+      foto: { cx: 539, cy: 738, r: 344 },
+      nome: { x0: 163, y0: 1180, x1: 916, y1: 1270, pill: false }, // barra roxa reservada na arte
+      moldura: ROOT + "assets/img/molduras/story.webp",
+      legal: { y: 0, maxW: 1000 }, // a arte já traz "Eleições 2026 · PSD · CNPJ"
       prov: { tituloY: 300, taglineY: 395, logoW: 560, logoY: 1330, numSize: 180, numY: 1640, rodapeY: 1800 } },
     { key: "perfil", slot: "B", label: "Foto de perfil do WhatsApp, Instagram e Facebook", dim: "1080 × 1080", w: 1080, h: 1080,
-      foto: { cx: 540, cy: 540, r: 540 },
+      foto: { cx: 539, cy: 492, r: 428 },
       nome: null,
-      legal: { y: 846, maxW: 820 },
-      moldura: ROOT + "assets/img/molduras/perfil.png" }
+      legal: { y: 0, maxW: 820 }, // a arte já traz "Eleições 2026 · PSD · CNPJ"
+      moldura: ROOT + "assets/img/molduras/perfil.webp" }
   ];
   var PERFIL = FORMATOS[2];
 
@@ -139,12 +139,15 @@
     if (foto) fotoCirculo(ctxA, 300, 300, 300, foto, stA);
   }
   // prévia do perfil: foto + moldura (real ou provisória), igual ao resultado final
-  var PERFIL_PREVIEW = { key: "perfil", w: 600, h: 600, foto: { cx: 300, cy: 300, r: 300 }, legal: { y: 846, maxW: 820 } };
+  // prévia do perfil em 600 px: mesma geometria da arte de 1080 px, em escala
+  var PS = 600 / 1080;
+  var PERFIL_PREVIEW = { key: "perfil", w: 600, h: 600, foto: { cx: 539 * PS, cy: 492 * PS, r: 428 * PS }, legal: { y: 0, maxW: 820 } };
   function desenharB() {
     ctxB.clearRect(0, 0, 600, 600);
     if (!molduras.perfil) fundoProvisorio(ctxB, PERFIL_PREVIEW);
     else { ctxB.fillStyle = "#EFE6FA"; ctxB.fillRect(0, 0, 600, 600); }
-    if (foto) fotoCirculo(ctxB, 300, 300, 300, foto, stB);
+    var pf = PERFIL_PREVIEW.foto;
+    if (foto) fotoCirculo(ctxB, pf.cx, pf.cy, pf.r + (molduras.perfil ? 4 * PS : 0), foto, stB);
     if (molduras.perfil) ctxB.drawImage(molduras.perfil, 0, 0, 600, 600); else frenteProvisoria(ctxB, PERFIL_PREVIEW);
     desenharLegal(ctxB, PERFIL_PREVIEW);
   }
