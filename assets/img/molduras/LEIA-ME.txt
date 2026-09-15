@@ -13,6 +13,8 @@ Medidas usadas em assets/js/apoiador.js (coordenadas em 1080 px):
   story  foto cx 539 cy 738 r 344 · nome em branco na barra roxa x 163-916 y 1180-1270
   perfil foto cx 539 cy 492 r 428 · nome em pilula rosa x 250-830 y 676-736 (acima da faixa do CNPJ)
 As tres artes ja trazem "Eleicoes 2026 · PSD · CNPJ 68.455.313/0001-78", por isso legal.y = 0.
+perfil.webp (14/09/2026): o bloco "EU APOIO MIRIAM RIBAS / 55188 / DEPUTADA ESTADUAL" foi subido 36 px por script
+para ficar centralizado na pilula (interior y 788-995), a pedido do Vinicius. Se a arte original for trocada, refazer.
 
 Para trocar uma arte: exporte PNG com transparencia real no mesmo tamanho, converta para .webp
 e ajuste cx/cy/r se o circulo mudar de lugar.
