@@ -159,7 +159,9 @@ window.SITE_CONFIG = {
         if (window.fbq) window.fbq("track", "Lead");
       };
       if (C.formEndpoint) {
-        var fd = new FormData(); Object.keys(data).forEach(function (k) { fd.append(k, data[k]); });
+        // x-www-form-urlencoded: o Apps Script lê direto em e.parameter; honeypot e consentimento vão junto
+        var fd = new URLSearchParams(); Object.keys(data).forEach(function (k) { fd.append(k, data[k]); });
+        fd.append("lgpd", "Sim"); fd.append("site", $("input[name=site]", form).value);
         fetch(C.formEndpoint, { method: "POST", mode: "no-cors", body: fd }).then(done).catch(function () {
           btn.disabled = false; btn.textContent = "Quero participar";
           msg.className = "form__msg erro"; msg.innerHTML = "Não conseguimos enviar agora. <a href=\"" + waLink(cadastroTexto(data)) + "\" target=\"_blank\" rel=\"noopener\">Envie seu cadastro pelo WhatsApp</a>.";
