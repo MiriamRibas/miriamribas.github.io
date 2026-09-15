@@ -223,6 +223,8 @@ body.nav-open .nav-toggle .icon-close { display: block; }
 @media (max-width: 960px) { .hero__badge { gap: .7rem; padding-right: 1rem; font-size: .7rem; letter-spacing: .06em; } .hero__badge .num { font-size: 1.8rem; } }
 .hero h1 { color: #fff; margin-bottom: .6em; }
 .hero h1 .destaque { color: var(--rosa); }
+/* nome da candidata como primeira linha do título principal (peso de SEO para "Míriam Ribas") */
+.hero h1 .hero__nome { display: block; font-size: .42em; letter-spacing: .14em; text-transform: uppercase; color: rgba(255, 255, 255, .92); margin-bottom: .35em; }
 .hero .lead { color: rgba(255, 255, 255, .82); max-width: 560px; font-size: 1.22rem; margin-bottom: 2rem; }
 .hero__visual { position: relative; z-index: 1; align-self: end; }
 .hero__heart {
