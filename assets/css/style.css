@@ -400,6 +400,25 @@ body.nav-open .nav-toggle .icon-close { display: block; }
 .play svg { width: 34px; height: 34px; margin-left: 4px; color: #fff; }
 .video-wrap__cta:hover .play { transform: scale(1.08); }
 
+/* vídeo vertical (reels) ao lado do texto; no celular fica embaixo, centralizado */
+.video-bloco {
+  display: grid; grid-template-columns: 1fr minmax(260px, 380px);
+  grid-template-areas: "texto video" "acoes video"; column-gap: clamp(2rem, 5vw, 5rem); row-gap: 0;
+}
+.video-bloco .section-head { grid-area: texto; align-self: end; margin-bottom: 0; }
+.video-bloco__acoes { grid-area: acoes; align-self: start; }
+.video-vertical { grid-area: video; position: relative; width: 100%; aspect-ratio: 9 / 16; border-radius: var(--radius); overflow: hidden; background: var(--roxo-900); box-shadow: var(--shadow); }
+.video-vertical video { display: block; width: 100%; height: 100%; object-fit: cover; background: var(--roxo-900); }
+.video-ia { font-size: .85rem; color: var(--texto-suave); margin: 0 0 1rem; }
+/* no celular o vídeo vem logo depois do texto; aviso de IA e botão ficam embaixo dele */
+@media (max-width: 800px) {
+  .video-bloco { grid-template-columns: 1fr; grid-template-areas: "texto" "video" "acoes"; row-gap: 1.5rem; }
+  .video-bloco .section-head { text-align: center; margin-inline: auto; }
+  .video-bloco__acoes { text-align: center; }
+  .video-bloco .btn-group { justify-content: center; }
+  .video-vertical { max-width: 340px; margin-inline: auto; }
+}
+
 /* ---------- galeria ---------- */
 .galeria { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 220px; gap: 1rem; }
 .galeria a { position: relative; border-radius: 18px; overflow: hidden; display: block; background: var(--lilas); }
@@ -534,6 +553,12 @@ body.nav-open .nav-toggle .icon-close { display: block; }
 .page-hero__img img { border-radius: var(--radius); box-shadow: 0 24px 60px -20px rgba(0, 0, 0, .6); max-height: 520px; width: auto; margin-left: auto; border: 4px solid rgba(255, 255, 255, .9); }
 .breadcrumb { font-size: .85rem; color: rgba(255, 255, 255, .65); margin-bottom: 1rem; font-family: var(--font-titulo); font-weight: 700; letter-spacing: .04em; }
 .breadcrumb a { color: rgba(255, 255, 255, .85); }
+.breadcrumb--claro { color: var(--texto-suave); }
+.breadcrumb--claro a { color: var(--roxo); }
+/* página Apoie: o gerador abre a página (H1 no tamanho de título de seção) e o bloco roxo vem depois (H2 no tamanho de título principal) */
+.section--topo { padding-top: clamp(2.5rem, 5vw, 4rem); }
+.h1-secao { font-size: clamp(1.9rem, 3.6vw, 2.9rem); font-weight: 800; }
+.page-hero .page-hero__titulo { color: #fff; font-size: clamp(2.4rem, 5.2vw, 4.2rem); font-weight: 900; }
 @media (max-width: 960px) { .page-hero__inner { grid-template-columns: 1fr; } .page-hero__img { display: none; } }
 
 /* ---------- história (quem é) ---------- */
