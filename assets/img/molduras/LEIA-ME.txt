@@ -11,7 +11,7 @@ circulo ajustado pela borda interna do anel amarelo + flood fill do xadrez + con
 Medidas usadas em assets/js/apoiador.js (coordenadas em 1080 px):
   feed   foto cx 539 cy 522 r 292 · nome em pilula rosa y 868-938
   story  foto cx 539 cy 738 r 344 · nome em branco na barra roxa x 163-916 y 1180-1270
-  perfil foto cx 539 cy 492 r 428 · sem nome
+  perfil foto cx 539 cy 492 r 428 · nome em pilula rosa x 250-830 y 676-736 (acima da faixa do CNPJ)
 As tres artes ja trazem "Eleicoes 2026 · PSD · CNPJ 68.455.313/0001-78", por isso legal.y = 0.
 
 Para trocar uma arte: exporte PNG com transparencia real no mesmo tamanho, converta para .webp

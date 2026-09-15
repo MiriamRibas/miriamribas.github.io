@@ -38,7 +38,7 @@
       prov: { tituloY: 300, taglineY: 395, logoW: 560, logoY: 1330, numSize: 180, numY: 1640, rodapeY: 1800 } },
     { key: "perfil", slot: "B", label: "Foto de perfil do WhatsApp, Instagram e Facebook", dim: "1080 × 1080", w: 1080, h: 1080,
       foto: { cx: 539, cy: 492, r: 428 },
-      nome: null,
+      nome: { x0: 250, y0: 676, x1: 830, y1: 736, pill: true }, // pílula rosa sobre a foto, logo acima da faixa do CNPJ
       legal: { y: 0, maxW: 820 }, // a arte já traz "Eleições 2026 · PSD · CNPJ"
       moldura: ROOT + "assets/img/molduras/perfil.webp" }
   ];
@@ -66,7 +66,7 @@
     '      <div class="ap__frame ap__frame--perfil" id="ap-frame-b"><canvas id="ap-prev-b" width="600" height="600"></canvas></div>' +
     '      <div class="ap__zoom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="ap-zoom-b" type="range" min="1" max="3" step="0.01" value="1" aria-label="Zoom da foto de perfil"></div>' +
     '    </div>' +
-    '    <div class="ap__step ap__hidden" id="ap-step4"><span class="ap__num">4</span><div><strong>Seu nome (opcional)</strong><p>Aparece na arte do feed e do story.</p></div></div>' +
+    '    <div class="ap__step ap__hidden" id="ap-step4"><span class="ap__num">4</span><div><strong>Seu nome (opcional)</strong><p>Aparece nas três artes: feed, story e foto de perfil.</p></div></div>' +
     '    <input id="ap-nome" class="ap__input ap__hidden" type="text" maxlength="28" placeholder="Ex.: Maria, de Diadema" autocomplete="name">' +
     '    <button id="ap-gerar" class="btn btn--rosa btn--lg ap__gerar ap__hidden" type="button">Gerar minhas artes ♥</button>' +
     '    <p class="ap__nota">Sua foto é processada só no seu aparelho. Nada é enviado ou guardado pela campanha.</p>' +
@@ -150,9 +150,12 @@
     if (foto) fotoCirculo(ctxB, pf.cx, pf.cy, pf.r + (molduras.perfil ? 4 * PS : 0), foto, stB);
     if (molduras.perfil) ctxB.drawImage(molduras.perfil, 0, 0, 600, 600); else frenteProvisoria(ctxB, PERFIL_PREVIEW);
     desenharLegal(ctxB, PERFIL_PREVIEW);
+    var nb = FORMATOS[2].nome;
+    if (nb) desenharNome(ctxB, { x0: nb.x0 * PS, y0: nb.y0 * PS, x1: nb.x1 * PS, y1: nb.y1 * PS, pill: nb.pill }, nomeEl.value, PS);
   }
   zoomA.addEventListener("input", function () { stA.z = parseFloat(zoomA.value); desenharA(); });
   zoomB.addEventListener("input", function () { stB.z = parseFloat(zoomB.value); desenharB(); });
+  nomeEl.addEventListener("input", function () { if (foto) desenharB(); });
 
   function arrastar(el, getSt, zoomInput, redraw) {
     var on = false, lx = 0, ly = 0;
