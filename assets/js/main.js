@@ -155,7 +155,13 @@ window.SITE_CONFIG = {
         // x-www-form-urlencoded: o Apps Script lê direto em e.parameter; honeypot e consentimento vão junto
         var fd = new URLSearchParams(); Object.keys(data).forEach(function (k) { fd.append(k, data[k]); });
         fd.append("lgpd", "Sim"); fd.append("site", $("input[name=site]", form).value);
-        fetch(C.formEndpoint, { method: "POST", mode: "no-cors", body: fd }).then(function () { done(false); }).catch(function () {
+        // o Apps Script leva ~6 s para responder: confirma em até 2,5 s e o keepalive segura o envio se a pessoa sair da página
+        var concluido = false;
+        var confirma = function () { if (!concluido) { concluido = true; done(false); } };
+        setTimeout(confirma, 2500);
+        fetch(C.formEndpoint, { method: "POST", mode: "no-cors", body: fd, keepalive: true }).then(confirma).catch(function () {
+          if (concluido) return;
+          concluido = true;
           btn.disabled = false; btn.textContent = rotulo;
           msg.className = "form__msg erro"; msg.innerHTML = "Não conseguimos enviar agora. <a href=\"" + waLink(cfg.texto(data)) + "\" target=\"_blank\" rel=\"noopener\">Envie pelo WhatsApp</a>.";
         });
