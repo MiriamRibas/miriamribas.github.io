@@ -16,7 +16,8 @@ window.SITE_CONFIG = {
   instagram: "https://www.instagram.com/miriamribas55188",
   // Endpoint do Google Apps Script que grava os formulários (cadastro e "Fale com a Míriam") na planilha (ver tools/apps-script.gs).
   // Vazio = os formulários abrem o WhatsApp da campanha com os dados.
-  formEndpoint: "",
+  // Publicado em 18/09/2026 na conta miriamribas1963@gmail.com (planilha "Míriam Ribas 55188", projeto "Untitled project").
+  formEndpoint: "https://script.google.com/macros/s/AKfycbw_zDtc-WZ6NDxRP0mrmGjcPzGzZEAnXKMCxPyRwqBeF9_wiK3Jw3te_S-rR72B-rxuIw/exec",
   // ID do vídeo do YouTube para a área de vídeo da home (vazio = mostra o poster com link).
   youtubeId: "",
   // Medição (preencher na etapa de SEO/anúncios). Só carregam depois do aceite de cookies.
