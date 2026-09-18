@@ -644,6 +644,25 @@ body.nav-open .nav-toggle .icon-close { display: block; }
 .form__msg.ok { display: block; background: #E8F8EE; color: #1B7A3D; }
 .form__msg.erro { display: block; background: #FDE8EF; color: #B3123F; }
 .hp { position: absolute; left: -9999px; opacity: 0; height: 0; width: 0; }
+
+/* ---------- perguntas frequentes (details/summary, sem JS) ---------- */
+.faq { max-width: 820px; margin-inline: auto; display: grid; gap: .75rem; }
+.faq details { background: #fff; border: 1px solid var(--borda); border-radius: 18px; transition: box-shadow .3s; }
+.faq details[open] { box-shadow: var(--shadow); }
+.faq summary {
+  list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  padding: 1.1rem 1.3rem; font-family: var(--font-titulo); font-weight: 800; color: var(--roxo); font-size: 1.05rem;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: ""; flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--lilas)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233F0672' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M12 6v12M6 12h12'/%3E%3C/svg%3E") center / 16px no-repeat;
+  transition: transform .3s var(--ease);
+}
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq summary:focus-visible { outline: 3px solid var(--rosa); outline-offset: 2px; border-radius: 18px; }
+.faq details p { margin: 0; padding: 0 1.3rem 1.2rem; color: var(--texto-suave); }
+.faq details a { color: var(--roxo); font-weight: 700; text-decoration: underline; }
 @media (max-width: 960px) { .contato { grid-template-columns: 1fr; } }
 @media (max-width: 600px) { .form__row { grid-template-columns: 1fr; } }
 

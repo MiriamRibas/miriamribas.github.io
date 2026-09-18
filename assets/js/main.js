@@ -14,10 +14,8 @@ window.SITE_CONFIG = {
   whatsappMsg: "Olá! Vim pelo site da Míriam Ribas 55188 e quero saber mais sobre a campanha.",
   email: "Miriamribas55188@gmail.com",
   instagram: "https://www.instagram.com/miriamribas55188",
-  // Página encontrada no Google em 13/09/2026: "Miriam Ribas (@MirianRiibas) · Pré-candidata a Deputada Estadual PSD"
-  facebook: "https://www.facebook.com/MirianRiibas",
-  // Endpoint do Google Apps Script que grava o cadastro na planilha (ver tools/apps-script.gs).
-  // Vazio = o formulário envia o cadastro pelo WhatsApp da campanha.
+  // Endpoint do Google Apps Script que grava os formulários (cadastro e "Fale com a Míriam") na planilha (ver tools/apps-script.gs).
+  // Vazio = os formulários abrem o WhatsApp da campanha com os dados.
   formEndpoint: "",
   // ID do vídeo do YouTube para a área de vídeo da home (vazio = mostra o poster com link).
   youtubeId: "",
@@ -43,7 +41,6 @@ window.SITE_CONFIG = {
   });
   $$("[data-mail]").forEach(function (a) { a.href = "mailto:" + C.email; if (a.hasAttribute("data-mail-text")) a.textContent = C.email; });
   $$("[data-instagram]").forEach(function (a) { a.href = C.instagram; a.target = "_blank"; a.rel = "noopener"; });
-  $$("[data-facebook]").forEach(function (a) { a.href = C.facebook; a.target = "_blank"; a.rel = "noopener"; });
   $$("[data-wa-number]").forEach(function (el) {
     var n = C.whatsapp.replace(/^55/, "");
     el.textContent = "(" + n.slice(0, 2) + ") " + n.slice(2, 7) + "-" + n.slice(7);
@@ -123,10 +120,11 @@ window.SITE_CONFIG = {
     }
   }
 
-  /* ---------- formulário de cadastro ---------- */
-  var form = $("#form-cadastro");
-  if (form) {
-    var msg = $(".form__msg", form), btn = $("button[type=submit]", form);
+  /* ---------- formulários: cadastro de apoiadores (Apoie) e "Fale com a Míriam" (home) ---------- */
+  // Com formEndpoint: grava na planilha (Apps Script). Sem endpoint: abre o WhatsApp da campanha com os dados.
+  function ligaFormulario(form, cfg) {
+    if (!form) return;
+    var msg = $(".form__msg", form), btn = $("button[type=submit]", form), rotulo = btn.textContent;
     var tel = $("input[name=whatsapp]", form);
     if (tel) tel.addEventListener("input", function () {
       var v = tel.value.replace(/\D/g, "").slice(0, 11);
@@ -137,44 +135,68 @@ window.SITE_CONFIG = {
     form.addEventListener("submit", function (ev) {
       ev.preventDefault();
       if ($("input[name=site]", form).value) return; // honeypot
-      var data = {
-        nome: form.nome.value.trim(),
-        whatsapp: form.whatsapp.value.trim(),
-        bairro: form.bairro.value.trim(),
-        voluntario: form.voluntario.checked ? "Sim" : "Não",
-        como_conheceu: form.como_conheceu.value,
-        origem: location.href,
-        data: new Date().toLocaleString("pt-BR")
-      };
-      if (!data.nome || data.whatsapp.replace(/\D/g, "").length < 10 || !data.bairro || !form.lgpd.checked) {
-        msg.className = "form__msg erro"; msg.textContent = "Preencha nome, WhatsApp, bairro/cidade e aceite o aviso de privacidade.";
+      var data = cfg.dados();
+      data.origem = location.href;
+      data.data = new Date().toLocaleString("pt-BR");
+      if (!cfg.completo(data) || data.whatsapp.replace(/\D/g, "").length < 10 || !form.lgpd.checked) {
+        msg.className = "form__msg erro"; msg.textContent = cfg.erro;
         return;
       }
       btn.disabled = true; btn.textContent = "Enviando…";
-      var done = function () {
+      var done = function (peloWhats) {
         msg.className = "form__msg ok";
-        msg.innerHTML = "Cadastro recebido! Obrigada por caminhar com a Míriam. <a href=\"" + waLink("Olá! Acabei de me cadastrar no site. Meu nome é " + data.nome + " (" + data.bairro + ").") + "\" target=\"_blank\" rel=\"noopener\">Quer falar com a equipe agora no WhatsApp?</a>";
-        form.reset(); btn.disabled = false; btn.textContent = "Quero participar";
-        if (window.gtag) window.gtag("event", "generate_lead", { event_category: "cadastro" });
+        msg.innerHTML = peloWhats ? "Abrimos o WhatsApp da campanha com os seus dados. É só tocar em enviar." : cfg.ok(data);
+        form.reset(); btn.disabled = false; btn.textContent = rotulo;
+        if (window.gtag) window.gtag("event", "generate_lead", { event_category: cfg.evento });
         if (window.fbq) window.fbq("track", "Lead");
       };
       if (C.formEndpoint) {
         // x-www-form-urlencoded: o Apps Script lê direto em e.parameter; honeypot e consentimento vão junto
         var fd = new URLSearchParams(); Object.keys(data).forEach(function (k) { fd.append(k, data[k]); });
         fd.append("lgpd", "Sim"); fd.append("site", $("input[name=site]", form).value);
-        fetch(C.formEndpoint, { method: "POST", mode: "no-cors", body: fd }).then(done).catch(function () {
-          btn.disabled = false; btn.textContent = "Quero participar";
-          msg.className = "form__msg erro"; msg.innerHTML = "Não conseguimos enviar agora. <a href=\"" + waLink(cadastroTexto(data)) + "\" target=\"_blank\" rel=\"noopener\">Envie seu cadastro pelo WhatsApp</a>.";
+        fetch(C.formEndpoint, { method: "POST", mode: "no-cors", body: fd }).then(function () { done(false); }).catch(function () {
+          btn.disabled = false; btn.textContent = rotulo;
+          msg.className = "form__msg erro"; msg.innerHTML = "Não conseguimos enviar agora. <a href=\"" + waLink(cfg.texto(data)) + "\" target=\"_blank\" rel=\"noopener\">Envie pelo WhatsApp</a>.";
         });
       } else {
-        window.open(waLink(cadastroTexto(data)), "_blank", "noopener");
-        done();
+        window.open(waLink(cfg.texto(data)), "_blank", "noopener");
+        done(true);
       }
     });
   }
-  function cadastroTexto(d) {
-    return "Cadastro pelo site Míriam Ribas 55188\nNome: " + d.nome + "\nWhatsApp: " + d.whatsapp + "\nBairro/cidade: " + d.bairro + "\nVoluntário(a): " + d.voluntario + "\nComo conheceu: " + d.como_conheceu;
-  }
+
+  var fc = $("#form-cadastro");
+  ligaFormulario(fc, {
+    evento: "cadastro",
+    dados: function () {
+      return {
+        nome: fc.nome.value.trim(), whatsapp: fc.whatsapp.value.trim(), bairro: fc.bairro.value.trim(),
+        voluntario: fc.voluntario.checked ? "Sim" : "Não", como_conheceu: fc.como_conheceu.value
+      };
+    },
+    completo: function (d) { return d.nome && d.bairro; },
+    erro: "Preencha nome, WhatsApp, bairro/cidade e aceite o aviso de privacidade.",
+    ok: function (d) {
+      return "Cadastro recebido! Obrigada por caminhar com a Míriam. <a href=\"" + waLink("Olá! Acabei de me cadastrar no site. Meu nome é " + d.nome + " (" + d.bairro + ").") + "\" target=\"_blank\" rel=\"noopener\">Quer falar com a equipe agora no WhatsApp?</a>";
+    },
+    texto: function (d) {
+      return "Cadastro pelo site Míriam Ribas 55188\nNome: " + d.nome + "\nWhatsApp: " + d.whatsapp + "\nBairro/cidade: " + d.bairro + "\nVoluntário(a): " + d.voluntario + "\nComo conheceu: " + d.como_conheceu;
+    }
+  });
+
+  var ff = $("#form-fale");
+  ligaFormulario(ff, {
+    evento: "mensagem",
+    dados: function () {
+      return { tipo: "mensagem", nome: ff.nome.value.trim(), whatsapp: ff.whatsapp.value.trim(), email: ff.email.value.trim(), mensagem: ff.mensagem.value.trim() };
+    },
+    completo: function (d) { return d.nome && d.mensagem; },
+    erro: "Preencha nome, WhatsApp, a mensagem e aceite o aviso de privacidade.",
+    ok: function () { return "Mensagem enviada! A equipe da Míriam vai ler e responder pelo WhatsApp ou pelo e-mail."; },
+    texto: function (d) {
+      return "Mensagem pelo site Míriam Ribas 55188\nNome: " + d.nome + "\nWhatsApp: " + d.whatsapp + (d.email ? "\nE-mail: " + d.email : "") + "\n\n" + d.mensagem;
+    }
+  });
 
   /* ---------- cookies + medição ---------- */
   var cookie = $(".cookie");
