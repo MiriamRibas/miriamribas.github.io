@@ -48,6 +48,45 @@ window.SITE_CONFIG = {
   });
   $$("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
+  /* ---------- mandar o site no WhatsApp, colinha e contagem para a eleição ---------- */
+  var textoIndicacao = "Conheça a Míriam Ribas, candidata a Deputada Estadual pelo PSD. Na urna, digite 55188. https://miriamribas.com.br/";
+  $$("[data-share-wa]").forEach(function (a) {
+    a.href = "https://wa.me/?text=" + encodeURIComponent(textoIndicacao);
+    a.target = "_blank"; a.rel = "noopener";
+    a.addEventListener("click", function () { if (window.gtag) window.gtag("event", "share", { method: "whatsapp", content_type: "site" }); });
+  });
+  $$("[data-colinha]").forEach(function (a) {
+    a.addEventListener("click", function () { if (window.gtag) window.gtag("event", "colinha_download"); });
+  });
+  var votar = $("#como-votar");
+  // no celular, "Mandar no WhatsApp" abre o compartilhamento do aparelho já com a imagem da colinha
+  if (votar && navigator.canShare && window.fetch && window.File && window.IntersectionObserver) {
+    var colinhaArq = null;
+    var io = new IntersectionObserver(function (es) {
+      if (!es[0].isIntersecting) return;
+      io.disconnect();
+      fetch($("[data-colinha]", votar).getAttribute("href")).then(function (r) { return r.blob(); }).then(function (b) {
+        var f = new File([b], "colinha-miriam-ribas-55188.jpg", { type: "image/jpeg" });
+        if (navigator.canShare({ files: [f] })) colinhaArq = f;
+      }).catch(function () {});
+    }, { rootMargin: "300px" });
+    io.observe(votar);
+    $("[data-share-wa]", votar).addEventListener("click", function (ev) {
+      if (!colinhaArq) return; // sem suporte: segue o link do WhatsApp
+      ev.preventDefault();
+      navigator.share({ files: [colinhaArq], text: textoIndicacao }).catch(function () {});
+    });
+  }
+  var contagem = $("[data-contagem]");
+  if (contagem) {
+    var hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+    var dias = Math.round((new Date(2026, 9, 4) - hoje) / 864e5);
+    if (dias > 1) contagem.innerHTML = "Faltam <strong>" + dias + "</strong> dias para a eleição";
+    else if (dias === 1) contagem.textContent = "A eleição é amanhã!";
+    else if (dias === 0) contagem.textContent = "A eleição é hoje! Digite 55188.";
+    if (dias >= 0) contagem.hidden = false;
+  }
+
   /* ---------- header ---------- */
   var header = $(".header");
   function onScroll() { if (header) header.classList.toggle("is-scrolled", window.scrollY > 12); }
