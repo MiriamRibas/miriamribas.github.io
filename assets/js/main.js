@@ -62,15 +62,16 @@ window.SITE_CONFIG = {
   // no celular, "Mandar no WhatsApp" abre o compartilhamento do aparelho já com a imagem da colinha
   if (votar && navigator.canShare && window.fetch && window.File && window.IntersectionObserver) {
     var colinhaArq = null;
-    var io = new IntersectionObserver(function (es) {
+    // observador próprio: não pode chamar "io", que é o do reveal ao rolar (var no mesmo escopo)
+    var ioColinha = new IntersectionObserver(function (es, obs) {
       if (!es[0].isIntersecting) return;
-      io.disconnect();
+      obs.disconnect();
       fetch($("[data-colinha]", votar).getAttribute("href")).then(function (r) { return r.blob(); }).then(function (b) {
         var f = new File([b], "colinha-miriam-ribas-55188.jpg", { type: "image/jpeg" });
         if (navigator.canShare({ files: [f] })) colinhaArq = f;
       }).catch(function () {});
     }, { rootMargin: "300px" });
-    io.observe(votar);
+    ioColinha.observe(votar);
     $("[data-share-wa]", votar).addEventListener("click", function (ev) {
       if (!colinhaArq) return; // sem suporte: segue o link do WhatsApp
       ev.preventDefault();
